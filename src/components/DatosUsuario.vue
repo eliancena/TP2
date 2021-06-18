@@ -100,15 +100,36 @@ form {
 }
 
 label {
-  margin: 2px;
+  padding: 5px;
   display: inline-block;
   width: 100%;
   text-align: right;
+  font-size: large;
 }
 
 button {
   width: fit-content;
   margin: auto;
   margin-top: 10px;
+  background-color: #44c767;
+  border-radius: 28px;
+  border: 1px solid #18ab29;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: Arial;
+  font-size: 17px;
+  padding: 16px 31px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #2f6627;
+}
+
+button:hover {
+  background-color: #5cbf2a;
+}
+
+button:active {
+  position: relative;
+  top: 1px;
 }
 </style>

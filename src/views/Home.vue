@@ -1,6 +1,5 @@
 <template>
   <div class="menu">
-    <h1>BANCO</h1>
     <datos-usuario></datos-usuario>
   </div>
 </template>

@@ -1,9 +1,17 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
+  <h1>BANCO</h1>
+  <nav id="nav">
+    <router-link to="/">Datos del usuario</router-link> |
+    <router-link :to="{ name: 'InfoPlazoFijo' }">
+      Información del plazo fijo
+    </router-link>
+  </nav>
   <router-view />
+  <footer>
+    <p>
+      Laboratorio de Computación III - TP2 - Cena, Elian; Pietnechuk, Rodrigo.
+    </p>
+  </footer>
 </template>
 
 <style>
@@ -26,5 +34,12 @@
 
 #nav a.router-link-exact-active {
   color: #42b983;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  left: 5px;
+  font-size: small;
 }
 </style>
