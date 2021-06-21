@@ -18,10 +18,26 @@
     </tr>
     <tr>
       <th>Monto a recibir</th>
-      <td>$10.333,33</td>
+      <td>${{montoFinal}}</td>
     </tr>
   </table>
 </template>
+
+<script>
+export default {
+  name: 'DatosPlazoFijo',
+  props: {
+    plazoFijo: {
+      type: Object,
+      required: true,
+    },
+    montoFinal:{
+        type: Number,
+        required:true
+    }
+  },
+};
+</script>
 
 <style scoped>
 table.datos-plazo-fijo {

@@ -57,6 +57,9 @@ export default {
       cantidadDias: MIN_DIAS,
       reinvertir: null,
       plazoFijo: [],
+      montoFinal: 0,
+      montoReinvertirFinal: [],
+      montoReinvertirInicial:[],
     };
   },
 
@@ -81,12 +84,41 @@ export default {
         reinvertir: this.reinvertir,
       });
 
+      if(this.cantidadDias>=30 && this.cantidadDias<=60){
+          this.montoFinal= this.monto+this.monto*(this.cantidadDias/360)*(40/100)
+          this.montoReinvertirInicial[0]=this.monto
+          this.calcularReinvertir(40)
+      }
+      else if(this.cantidadDias>=61 && this.cantidadDias<=120){
+          this.montoFinal= this.monto+this.monto*(this.cantidadDias/360)*(45/100)
+          this.montoReinvertirInicial[0]=this.monto
+          this.calcularReinvertir(45)
+      }
+      else if(this.cantidadDias>=121 && this.cantidadDias<=360){
+          this.montoFinal= this.monto+this.monto*(this.cantidadDias/360)*(50/100)
+          this.montoReinvertirInicial[0]=this.monto
+          this.calcularReinvertir(50)
+      }
+      else {
+          this.montoFinal= this.monto+this.monto*(this.cantidadDias/360)*(65/100)
+          this.montoReinvertirInicial[0]=this.monto
+          this.calcularReinvertir(65)
+      }
+
       this.nombre = "";
       this.apellido = "";
       this.monto = MIN_MONTO;
       this.cantidadDias = MIN_DIAS;
       this.reinvertir = null;
     },
+    calcularReinvertir(porcentaje){
+      for (let i = 0; i < 4; i++) {
+        this.montoReinvertirFinal[i]= this.montoReinvertirInicial[i]+this.montoReinvertirInicial[i]*(this.cantidadDias/360)*(porcentaje/100)
+        if(this.montoReinvertirInicial.length<4){
+        this.montoReinvertirInicial[i+1]=this.montoReinvertirFinal[i]
+        }
+      }
+    }
   },
 };
 </script>

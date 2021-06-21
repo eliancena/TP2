@@ -35,6 +35,23 @@
   </table>
 </template>
 
+<script>
+export default {
+  name:'TablaReinversion',
+  props:{
+    montoReinvertirFinal:{
+      type: Array,
+      required:true
+    },
+    montoReinvertirInicial:{
+      type:Array,
+      required:true
+    }
+  }
+}
+</script>
+
+
 <style scoped>
 table.green-table {
   border: 6px solid #24943a;
