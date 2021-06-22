@@ -11,10 +11,10 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="elem in montosReinversion" :key="elem.periodo">
+      <tr v-for="elem in montos" :key="elem.periodo">
         <td>{{ elem.periodo }}</td>
-        <td>${{ elem.montoInicial }}</td>
-        <td>${{ elem.montoFinal }}</td>
+        <td>${{ elem.montoInicial.toFixed(2) }}</td>
+        <td>${{ elem.montoFinal.toFixed(2) }}</td>
       </tr>
     </tbody>
   </table>
@@ -24,7 +24,7 @@
 export default {
   name: "TablaReinversion",
   props: {
-    montosReinversion: {
+    montos: {
       type: Array,
       required: true,
     },

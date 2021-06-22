@@ -10,7 +10,7 @@
     </tr>
     <tr>
       <th>Monto invertido</th>
-      <td>${{ plazoFijo.monto }}</td>
+      <td>${{ plazoFijo.monto.toFixed(2) }}</td>
     </tr>
     <tr>
       <th>Plazo de la inversión</th>
@@ -18,22 +18,18 @@
     </tr>
     <tr>
       <th>Monto a recibir</th>
-      <td>${{ plazoFijo.montoFinal }}</td>
+      <td>${{ plazoFijo.montoFinal.toFixed(2) }}</td>
     </tr>
   </table>
 </template>
 
 <script>
+import store from "@/services/store.js";
+
 export default {
   name: "DatosPlazoFijo",
-  props: {
-    plazo: {
-      type: String,
-      required: true,
-    },
-  },
   created() {
-    this.plazoFijo = JSON.parse(this.plazo);
+    this.plazoFijo = store;
   },
 };
 </script>

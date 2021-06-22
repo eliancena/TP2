@@ -3,17 +3,12 @@
     <legend><h2>Ingrese sus datos</h2></legend>
     <label>
       Apellido:
-      <input
-        type="text"
-        id="apellido"
-        v-model.trim="plazoFijo.apellido"
-        required
-      />
+      <input type="text" id="apellido" v-model.trim="plazo.apellido" required />
     </label>
 
     <label>
       Nombre:
-      <input type="text" id="nombre" v-model.trim="plazoFijo.nombre" required />
+      <input type="text" id="nombre" v-model.trim="plazo.nombre" required />
     </label>
 
     <label>
@@ -21,7 +16,7 @@
       <input
         type="number"
         id="monto"
-        v-model.number="plazoFijo.monto"
+        v-model.number="plazo.monto"
         min="1000"
         required
       />
@@ -32,7 +27,7 @@
       <input
         type="number"
         id="cantidad"
-        v-model.number="plazoFijo.cantidadDias"
+        v-model.number="plazo.cantidadDias"
         min="30"
         required
       />
@@ -40,7 +35,7 @@
 
     <label>
       ¿Desea reinvertir el capital?
-      <select v-model="plazoFijo.reinvertir" required>
+      <select v-model="plazo.reinvertir" required>
         <option :value="true">Si</option>
         <option :value="false">No</option>
       </select>
@@ -51,67 +46,44 @@
 </template>
 
 <script>
-const MIN_MONTO = 1000,
-  MIN_DIAS = 30;
+import plazoFijo from "@/services/store.js";
 
 export default {
-  data() {
-    return {
-      plazoFijo: {
-        nombre: "",
-        apellido: "",
-        monto: MIN_MONTO,
-        cantidadDias: MIN_DIAS,
-        reinvertir: null,
-        montoFinal: 0,
-        montosReinversion: [
-          { periodo: 1, montoInicial: 0, montoFinal: 0 },
-          { periodo: 2, montoInicial: 0, montoFinal: 0 },
-          { periodo: 3, montoInicial: 0, montoFinal: 0 },
-          { periodo: 4, montoInicial: 0, montoFinal: 0 },
-        ],
-      },
-    };
+  created() {
+    this.plazo = plazoFijo;
   },
 
   methods: {
     calcular() {
-      this.plazoFijo.montoFinal = this.calcularMontoFinal(this.plazoFijo.monto);
-      this.calcularReinversion(this.plazoFijo.monto);
+      plazoFijo.montoFinal = this.calcularMontoFinal(plazoFijo.monto);
+      this.calcularReinversion(plazoFijo.monto);
 
-      this.$router.push({
-        name: "InfoPlazoFijo",
-        params: { plazo: JSON.stringify(this.plazoFijo) },
-      });
+      this.$router.push({ name: "InfoPlazoFijo" });
     },
 
     calcularMontoFinal(montoInicial) {
-      return (
-        Math.round(
-          (montoInicial +
-            montoInicial *
-              (this.plazoFijo.cantidadDias / 360) *
-              (this.porcentaje / 100)) *
-            100
-        ) / 100
-      );
+      const montoFinal =
+        montoInicial +
+        montoInicial * (plazoFijo.cantidadDias / 360) * (this.porcentaje / 100);
+
+      return Math.round(montoFinal * 100) / 100;
     },
 
     calcularReinversion(montoInicial) {
-      for (let i in this.plazoFijo.montosReinversion) {
-        this.plazoFijo.montosReinversion[i].montoInicial = montoInicial;
-        this.plazoFijo.montosReinversion[i].montoFinal =
+      for (let i in plazoFijo.montosReinversion) {
+        plazoFijo.montosReinversion[i].montoInicial = montoInicial;
+        plazoFijo.montosReinversion[i].montoFinal =
           this.calcularMontoFinal(montoInicial);
-        montoInicial = this.plazoFijo.montosReinversion[i].montoFinal;
+        montoInicial = plazoFijo.montosReinversion[i].montoFinal;
       }
     },
   },
 
   computed: {
     porcentaje() {
-      if (this.plazoFijo.cantidadDias >= 360) return 65;
-      if (this.plazoFijo.cantidadDias >= 121) return 50;
-      if (this.plazoFijo.cantidadDias >= 61) return 45;
+      if (plazoFijo.cantidadDias >= 360) return 65;
+      if (plazoFijo.cantidadDias >= 121) return 50;
+      if (plazoFijo.cantidadDias >= 61) return 45;
       return 40;
     },
   },
