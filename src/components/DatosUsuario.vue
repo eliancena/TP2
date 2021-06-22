@@ -1,13 +1,19 @@
 <template>
   <form name="datos-usuario" @submit.prevent="calcular">
+    <legend><h2>Ingrese sus datos</h2></legend>
     <label>
       Apellido:
-      <input type="text" id="apellido" v-model="apellido" required />
+      <input
+        type="text"
+        id="apellido"
+        v-model.trim="plazoFijo.apellido"
+        required
+      />
     </label>
 
     <label>
       Nombre:
-      <input type="text" id="nombre" v-model="nombre" required />
+      <input type="text" id="nombre" v-model.trim="plazoFijo.nombre" required />
     </label>
 
     <label>
@@ -15,7 +21,7 @@
       <input
         type="number"
         id="monto"
-        v-model.number="monto"
+        v-model.number="plazoFijo.monto"
         min="1000"
         required
       />
@@ -26,7 +32,7 @@
       <input
         type="number"
         id="cantidad"
-        v-model.number="cantidadDias"
+        v-model.number="plazoFijo.cantidadDias"
         min="30"
         required
       />
@@ -34,9 +40,9 @@
 
     <label>
       ¿Desea reinvertir el capital?
-      <select v-model.number="reinvertir" required>
-        <option value="1">Si</option>
-        <option value="0">No</option>
+      <select v-model="plazoFijo.reinvertir" required>
+        <option :value="true">Si</option>
+        <option :value="false">No</option>
       </select>
     </label>
 
@@ -51,79 +57,62 @@ const MIN_MONTO = 1000,
 export default {
   data() {
     return {
-      nombre: "",
-      apellido: "",
-      monto: MIN_MONTO,
-      cantidadDias: MIN_DIAS,
-      reinvertir: null,
-      plazoFijo: [],
-      montoFinal: 0,
-      montoReinvertirFinal: [],
-      montoReinvertirInicial: [],
+      plazoFijo: {
+        nombre: "",
+        apellido: "",
+        monto: MIN_MONTO,
+        cantidadDias: MIN_DIAS,
+        reinvertir: null,
+        montoFinal: 0,
+        montosReinversion: [
+          { periodo: 1, montoInicial: 0, montoFinal: 0 },
+          { periodo: 2, montoInicial: 0, montoFinal: 0 },
+          { periodo: 3, montoInicial: 0, montoFinal: 0 },
+          { periodo: 4, montoInicial: 0, montoFinal: 0 },
+        ],
+      },
     };
   },
 
   methods: {
     calcular() {
-      if (
-        this.nombre.trim() === "" ||
-        this.apellido.trim() === "" ||
-        this.monto === "" ||
-        this.cantidadDias === "" ||
-        this.reinvertir === null
-      ) {
-        alert("!DATO FALTANTE!");
-        return;
-      }
+      this.plazoFijo.montoFinal = this.calcularMontoFinal(this.plazoFijo.monto);
+      this.calcularReinversion(this.plazoFijo.monto);
 
-      this.plazoFijo.push({
-        nombre: this.nombre,
-        apellido: this.apellido,
-        monto: this.monto,
-        cantidad: this.cantidad,
-        reinvertir: this.reinvertir,
+      this.$router.push({
+        name: "InfoPlazoFijo",
+        params: { plazo: JSON.stringify(this.plazoFijo) },
       });
-
-      let porcentaje;
-
-      if (this.cantidadDias >= 30 && this.cantidadDias <= 60) {
-        porcentaje = 40;
-      } else if (this.cantidadDias >= 61 && this.cantidadDias <= 120) {
-        porcentaje = 45;
-      } else if (this.cantidadDias >= 121 && this.cantidadDias <= 360) {
-        porcentaje = 50;
-      } else {
-        porcentaje = 65;
-      }
-
-      this.calcularMontoFinal(porcentaje);
-      this.calcularReinvertir(porcentaje);
-
-      this.nombre = "";
-      this.apellido = "";
-      this.monto = MIN_MONTO;
-      this.cantidadDias = MIN_DIAS;
-      this.reinvertir = null;
     },
 
-    calcularMontoFinal(porcentaje) {
-      this.montoFinal =
-        this.monto +
-        this.monto * (this.cantidadDias / 360) * (porcentaje / 100);
-      this.montoReinvertirInicial[0] = this.monto;
+    calcularMontoFinal(montoInicial) {
+      return (
+        Math.round(
+          (montoInicial +
+            montoInicial *
+              (this.plazoFijo.cantidadDias / 360) *
+              (this.porcentaje / 100)) *
+            100
+        ) / 100
+      );
     },
 
-    calcularReinvertir(porcentaje) {
-      for (let i = 0; i < 4; i++) {
-        this.montoReinvertirFinal[i] +=
-          this.montoReinvertirInicial[i] *
-          (this.cantidadDias / 360) *
-          (porcentaje / 100);
-
-        if (this.montoReinvertirInicial.length < 4) {
-          this.montoReinvertirInicial[i + 1] = this.montoReinvertirFinal[i];
-        }
+    calcularReinversion(montoInicial) {
+      for (let i in this.plazoFijo.montosReinversion) {
+        this.plazoFijo.montosReinversion[i].montoInicial = montoInicial;
+        this.plazoFijo.montosReinversion[i].montoFinal =
+          this.calcularMontoFinal(montoInicial);
+        montoInicial = this.plazoFijo.montosReinversion[i].montoFinal;
       }
+    },
+  },
+
+  computed: {
+    porcentaje() {
+      if (this.plazoFijo.cantidadDias >= 360) return 65;
+      if (this.plazoFijo.cantidadDias >= 121) return 50;
+      if (this.plazoFijo.cantidadDias >= 61) return 45;
+      return 40;
     },
   },
 };
@@ -143,31 +132,5 @@ label {
   width: 100%;
   text-align: right;
   font-size: large;
-}
-
-button {
-  width: fit-content;
-  margin: auto;
-  margin-top: 10px;
-  background-color: #44c767;
-  border-radius: 28px;
-  border: 1px solid #18ab29;
-  display: inline-block;
-  cursor: pointer;
-  color: #ffffff;
-  font-family: Arial;
-  font-size: 17px;
-  padding: 16px 31px;
-  text-decoration: none;
-  text-shadow: 0px 1px 0px #2f6627;
-}
-
-button:hover {
-  background-color: #5cbf2a;
-}
-
-button:active {
-  position: relative;
-  top: 1px;
 }
 </style>

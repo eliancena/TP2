@@ -2,39 +2,38 @@
   <table class="datos-plazo-fijo">
     <tr>
       <th>Apellido</th>
-      <td>apellido</td>
+      <td>{{ plazoFijo.apellido }}</td>
     </tr>
     <tr>
       <th>Nombre</th>
-      <td>nombre</td>
+      <td>{{ plazoFijo.nombre }}</td>
     </tr>
     <tr>
       <th>Monto invertido</th>
-      <td>$10.000</td>
+      <td>${{ plazoFijo.monto }}</td>
     </tr>
     <tr>
       <th>Plazo de la inversión</th>
-      <td>30 días</td>
+      <td>{{ plazoFijo.cantidadDias }} días</td>
     </tr>
     <tr>
       <th>Monto a recibir</th>
-      <td>${{montoFinal}}</td>
+      <td>${{ plazoFijo.montoFinal }}</td>
     </tr>
   </table>
 </template>
 
 <script>
 export default {
-  name: 'DatosPlazoFijo',
+  name: "DatosPlazoFijo",
   props: {
-    plazoFijo: {
-      type: Object,
+    plazo: {
+      type: String,
       required: true,
     },
-    montoFinal:{
-        type: Number,
-        required:true
-    }
+  },
+  created() {
+    this.plazoFijo = JSON.parse(this.plazo);
   },
 };
 </script>

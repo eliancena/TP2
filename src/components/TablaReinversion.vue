@@ -11,25 +11,10 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>1</td>
-        <td>10000</td>
-        <td>10333.33</td>
-      </tr>
-      <tr>
-        <td>2</td>
-        <td>10333.33</td>
-        <td>10677,77</td>
-      </tr>
-      <tr>
-        <td>3</td>
-        <td>10677,77</td>
-        <td>11033,69</td>
-      </tr>
-      <tr>
-        <td>4</td>
-        <td>11033,69</td>
-        <td>11401,48</td>
+      <tr v-for="elem in montosReinversion" :key="elem.periodo">
+        <td>{{ elem.periodo }}</td>
+        <td>${{ elem.montoInicial }}</td>
+        <td>${{ elem.montoFinal }}</td>
       </tr>
     </tbody>
   </table>
@@ -37,20 +22,15 @@
 
 <script>
 export default {
-  name:'TablaReinversion',
-  props:{
-    montoReinvertirFinal:{
+  name: "TablaReinversion",
+  props: {
+    montosReinversion: {
       type: Array,
-      required:true
+      required: true,
     },
-    montoReinvertirInicial:{
-      type:Array,
-      required:true
-    }
-  }
-}
+  },
+};
 </script>
-
 
 <style scoped>
 table.green-table {
