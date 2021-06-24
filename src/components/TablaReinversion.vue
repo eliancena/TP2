@@ -11,7 +11,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="elem in montos" :key="elem.periodo">
+      <tr v-for="elem in montosReinversion" :key="elem.periodo">
         <td>{{ elem.periodo }}</td>
         <td>${{ elem.montoInicial.toFixed(2) }}</td>
         <td>${{ elem.montoFinal.toFixed(2) }}</td>
@@ -21,12 +21,37 @@
 </template>
 
 <script>
+import store from "@/services/store.js";
+
 export default {
   name: "TablaReinversion",
   props: {
-    montos: {
-      type: Array,
+    montoInicial: {
+      type: Number,
       required: true,
+    },
+    cantidadDias: {
+      type: Number,
+      required: true,
+    },
+  },
+
+  computed: {
+    montosReinversion() {
+      let montos = [];
+      let montoInicial = this.montoInicial;
+      for (let i = 1; i <= 4; i++) {
+        const periodo = {
+          periodo: i,
+          montoInicial: montoInicial,
+          montoFinal: store.calcularMontoFinal(montoInicial, this.cantidadDias),
+        };
+
+        montos.push(periodo);
+        montoInicial = periodo.montoFinal;
+      }
+
+      return montos;
     },
   },
 };

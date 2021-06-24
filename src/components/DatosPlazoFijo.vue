@@ -2,23 +2,23 @@
   <table class="datos-plazo-fijo">
     <tr>
       <th>Apellido</th>
-      <td>{{ plazoFijo.apellido }}</td>
+      <td>{{ $route.query.apellido }}</td>
     </tr>
     <tr>
       <th>Nombre</th>
-      <td>{{ plazoFijo.nombre }}</td>
+      <td>{{ $route.query.nombre }}</td>
     </tr>
     <tr>
       <th>Monto invertido</th>
-      <td>${{ plazoFijo.monto.toFixed(2) }}</td>
+      <td>${{ monto.toFixed(2) }}</td>
     </tr>
     <tr>
       <th>Plazo de la inversión</th>
-      <td>{{ plazoFijo.cantidadDias }} días</td>
+      <td>{{ cantidadDias }} días</td>
     </tr>
     <tr>
       <th>Monto a recibir</th>
-      <td>${{ plazoFijo.montoFinal.toFixed(2) }}</td>
+      <td>${{ montoFinal.toFixed(2) }}</td>
     </tr>
   </table>
 </template>
@@ -28,8 +28,17 @@ import store from "@/services/store.js";
 
 export default {
   name: "DatosPlazoFijo",
-  created() {
-    this.plazoFijo = store;
+  data() {
+    return {
+      monto: parseFloat(this.$route.query.monto),
+      cantidadDias: parseInt(this.$route.query.cantidadDias),
+    };
+  },
+
+  computed: {
+    montoFinal() {
+      return store.calcularMontoFinal(this.monto, this.cantidadDias);
+    },
   },
 };
 </script>
