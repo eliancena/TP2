@@ -69,38 +69,9 @@ export default {
 
   methods: {
     calcular() {
-      //this.plazoFijo.montoFinal = this.calcularMontoFinal(this.plazoFijo.monto);
-      //this.calcularReinversion(this.plazoFijo.monto);
-
       this.$router.push({ name: "InfoPlazoFijo", query: this.plazoFijo });
     },
-
-    /*calcularMontoFinal(montoInicial) {
-      const montoFinal =
-        montoInicial +
-        montoInicial * (this.plazoFijo.cantidadDias / 360) * (this.porcentaje / 100);
-
-      return Math.round(montoFinal * 100) / 100;
-    },
-
-    calcularReinversion(montoInicial) {
-      for (let i in this.plazoFijo.montosReinversion) {
-        this.plazoFijo.montosReinversion[i].montoInicial = montoInicial;
-        this.plazoFijo.montosReinversion[i].montoFinal =
-          this.calcularMontoFinal(montoInicial);
-        montoInicial = this.plazoFijo.montosReinversion[i].montoFinal;
-      }
-    },*/
   },
-
-  /*computed: {
-    porcentaje() {
-      if (this.plazoFijo.cantidadDias >= 360) return 65;
-      if (this.plazoFijo.cantidadDias >= 121) return 50;
-      if (this.plazoFijo.cantidadDias >= 61) return 45;
-      return 40;
-    },
-  },*/
 };
 </script>
 
