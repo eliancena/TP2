@@ -2,11 +2,11 @@
   <table class="datos-plazo-fijo">
     <tr>
       <th>Apellido</th>
-      <td>{{ $route.query.apellido }}</td>
+      <td>{{ apellido }}</td>
     </tr>
     <tr>
       <th>Nombre</th>
-      <td>{{ $route.query.nombre }}</td>
+      <td>{{ nombre }}</td>
     </tr>
     <tr>
       <th>Monto invertido</th>
@@ -28,16 +28,21 @@ import store from "@/services/store.js";
 
 export default {
   name: "DatosPlazoFijo",
-  data() {
-    return {
-      monto: parseFloat(this.$route.query.monto),
-      cantidadDias: parseInt(this.$route.query.cantidadDias),
-    };
-  },
-
   computed: {
+    apellido() {
+      return this.$route.query.apellido;
+    },
+    nombre() {
+      return this.$route.query.nombre;
+    },
     montoFinal() {
       return store.calcularMontoFinal(this.monto, this.cantidadDias);
+    },
+    monto() {
+      return parseFloat(this.$route.query.monto);
+    },
+    cantidadDias() {
+      return parseInt(this.$route.query.cantidadDias);
     },
   },
 };

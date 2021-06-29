@@ -1,7 +1,7 @@
 <template>
   <div class="info-plazo-fijo">
     <h2>Información del plazo fijo</h2>
-    <datos-plazo-fijo :plazo="$route.query" />
+    <datos-plazo-fijo :plazo="plazo" />
     <tabla-reinversion
       v-if="reinvertir"
       :monto-inicial="montoInicial"
@@ -23,12 +23,19 @@ export default {
     TablaReinversion,
   },
 
-  data() {
-    return {
-      reinvertir: parseInt(this.$route.query.reinvertir),
-      montoInicial: parseFloat(this.$route.query.monto),
-      cantidadDias: parseInt(this.$route.query.cantidadDias),
-    };
+  computed: {
+    reinvertir() {
+      return parseInt(this.$route.query.reinvertir);
+    },
+    montoInicial() {
+      return parseFloat(this.$route.query.monto);
+    },
+    cantidadDias() {
+      return parseInt(this.$route.query.cantidadDias);
+    },
+    plazo() {
+      return this.$route.query.plazo;
+    },
   },
 };
 </script>
